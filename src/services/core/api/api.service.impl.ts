@@ -16,7 +16,7 @@ export abstract class ApiServiceImpl implements ApiService {
   private static readonly ENDPOINTS = {
     users: '/rest/users',
   };
-  storeType?: StoreType;
+  readonly storeType?: StoreType;
   /**
    * Any request that fails is first passed to this error handler before returning it to the caller.
    * Error can be modified or certain actions can be taken if required.
@@ -34,19 +34,19 @@ export abstract class ApiServiceImpl implements ApiService {
   }
 
   // Returns error object from AxiosResponse
-  protected static parseError(response: AxiosResponse): string {
+  private static parseError(response: AxiosResponse): string {
     return _.get(response, 'response.data', '');
   }
 
   // Sets fetching flag in respective store
-  protected setFetching(flag: boolean = true) {
+  private setFetching(flag: boolean = true) {
     if (this.storeType) {
       stores[this.storeType].setFetching(flag);
     }
   }
 
   // Optional: Sets an error in respective store
-  protected setError(e?: any) {
+  private setError(e?: any) {
     if (this.storeType) {
       stores[this.storeType].setError(
         ApiServiceImpl.parseError(e) || e.toString(),
@@ -153,10 +153,6 @@ export abstract class ApiServiceImpl implements ApiService {
   ): Promise<AxiosResponse<T>> {
     const api = await this.getAxiosInstance(headers);
     return api.delete(url);
-  }
-
-  protected notifySuccess() {
-    // AlertsHelper.success(tx, options);
   }
 
   protected success<T>(data: T): ServiceResponse<T> {

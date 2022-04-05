@@ -1,4 +1,4 @@
-import {StoreType} from '../../stores';
+import {StoreType} from '../../../stores';
 
 export interface ApiService {
   /**
